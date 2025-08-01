@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
 
 import SpotForm from './pages/SpotForm';
 import SpotList from './pages/SpotList';
@@ -9,6 +10,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/spots" element={<SpotList />} />
           <Route path="/add-spot" element={<SpotForm />} />
         </Routes>
