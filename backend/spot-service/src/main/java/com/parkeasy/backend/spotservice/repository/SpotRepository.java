@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface SpotRepository extends JpaRepository<Spot, UUID> {
     List<Spot> findByAvailableTrue();
+    List<Spot> findByHostId(UUID hostId);
+
 }

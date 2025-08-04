@@ -7,3 +7,11 @@ const API = axios.create({
 
 export const createSpot = (spot) => API.post('', spot); // ← no trailing slash
 export const getSpots = () => API.get('');
+export const getAllSpots = () => API.get('');
+export const getSpotById = (id) => API.get(`/${id}`);
+export const getSpotsByHost = (hostId) => API.get(`/host/${hostId}`);
+export const updateSpot = (id, spot) => API.put(`/${id}`, spot);
+export const deleteSpot = (id) => API.delete(`/${id}`);
+export const getAvailableSpots = () => API.get('/available');
+export const searchSpots = (params) =>
+  axios.get('/api/spots/search', { params });

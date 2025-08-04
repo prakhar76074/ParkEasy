@@ -5,23 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbe20504-e4d3-410a-9873-428899692233" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/Controller/SpotController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/config/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/model/Spot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/repository/SpotRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/service/SpotService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/dto/SpotRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/dto/SpotResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/utils/GeoUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/spot-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/spot-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/Controller/SpotController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/Controller/SpotController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/model/Spot.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/model/Spot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/repository/SpotRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/repository/SpotRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/service/SpotService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/spot-service/src/main/java/com/parkeasy/backend/spotservice/service/SpotService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-cra-backup/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-cra-backup/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/components/HeroSection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/components/HeroSection.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/components/Navbar.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/pages/LandingPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/pages/LandingPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/pages/SpotForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/pages/SpotForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/pages/SpotList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/pages/SpotList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-cra-backup/src/services/SpotService.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-cra-backup/src/services/SpotService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +116,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754037028547</updated>
-      <workItem from="1754037030770" duration="5046000" />
+      <workItem from="1754037030770" duration="21392000" />
     </task>
     <servers />
   </component>
