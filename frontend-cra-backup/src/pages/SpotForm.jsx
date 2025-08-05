@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createSpot } from '../services/SpotService';
+import { useNavigate } from 'react-router-dom';
 
 const SpotForm = () => {
   const [spot, setSpot] = useState({
@@ -15,6 +16,7 @@ const SpotForm = () => {
     pricePerHour: '',
     available: true,
   });
+  const navigate = useNavigate();
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -48,8 +50,10 @@ const SpotForm = () => {
       ...spot,
       hostId: "99f3b02e-42f4-4b3e-bc34-21a0cc8b27d9", // ✅ TEMP: Hardcoded hostId
     };
+    
     await createSpot(spotWithHost);
     alert('Spot created!');
+    navigate('/spots');
   };
 
   return (

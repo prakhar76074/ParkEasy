@@ -16,6 +16,7 @@ public class SpotRequestDto {
     private String pincode;
     private String country;
     private Double pricePerHour;
+    private Boolean available;
     private String imageUrl1;
     private String imageUrl2;
     private UUID hostId; // NEW — must be passed for now

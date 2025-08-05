@@ -18,6 +18,9 @@ const SpotCard = ({ spot }) => {
         <p className="text-sm text-gray-700 mb-1">
           <strong>Address:</strong> {spot.address}, {spot.city}, {spot.state}, {spot.pincode}
         </p>
+        <p className={spot.available ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
+        Available :{spot.available ? "Available" : "Not Available"}
+</p>
         <p className="text-sm text-gray-700 mb-1">
           <strong>Price:</strong> ₹{spot.pricePerHour}/hr
         </p>

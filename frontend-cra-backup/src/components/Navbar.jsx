@@ -1,17 +1,52 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userJson = localStorage.getItem('user');
+  const user = userJson && userJson !== 'undefined' ? JSON.parse(userJson) : null;
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/auth');
+  };
+  const isHost = user?.roles?.includes('HOST');
+
   return (
-    <nav className="bg-blue-700 text-white shadow">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold tracking-wide">ParkEasy</h1>
-        <div className="space-x-6 text-sm">
-  {/* <a href="#features" className="hover:underline">Features</a>
-  <a href="#how-it-works" className="hover:underline">How it Works</a> */}
-  <a href="/login" className="hover:underline">Login</a>
-  <a href="/signup" className="bg-white text-blue-700 px-3 py-1 rounded hover:bg-gray-100">Sign Up</a>
-</div>
- 
+    <nav className="bg-blue-600 p-4 text-white flex justify-between">
+      <div className="text-xl font-bold cursor-pointer" onClick={() => navigate('/')}>
+        ParkEasy
+      </div>
+
+      <div className="flex items-center gap-4">
+        {isHost && (
+          <button
+            onClick={() => navigate('/host-spots')}
+            className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+          >
+            My Hosted Spots
+          </button>
+        )}
+        </div>
+      <div className="flex items-center gap-4">
+       
+        {user && <span className="text-sm">Hi, {user.name.split(' ')[0]}</span>}
+        {token ? (
+          <button
+            onClick={handleLogout}
+            className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/auth')}
+            className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+          >
+            Login
+          </button>
+        )}
       </div>
     </nav>
   );

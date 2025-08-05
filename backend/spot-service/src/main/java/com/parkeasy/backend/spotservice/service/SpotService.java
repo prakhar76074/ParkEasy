@@ -76,6 +76,7 @@ public class SpotService {
         spot.setPricePerHour(dto.getPricePerHour());
         spot.setImageUrl1(dto.getImageUrl1());
         spot.setImageUrl2(dto.getImageUrl2());
+        spot.setAvailable(dto.getAvailable());
 
         // Optionally update lat/lon again (if address changed)
         String updatedAddress = String.format("%s, %s, %s - %s, %s",

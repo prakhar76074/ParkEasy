@@ -6,9 +6,9 @@ import SpotDetail from './pages/SpotDetail';
 import EditSpot from './pages/EditSpot';
 import SpotForm from './pages/SpotForm';
 import SpotList from './pages/SpotList';
-
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
+import AuthForm from './pages/AuthForm';
+import Unauthorized from './pages/UnAuthorized';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -19,10 +19,22 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/spots" element={<SpotList />} />
         <Route path="/add-spot" element={<SpotForm />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/auth" element={<AuthForm />} />
+       <Route path="/unauthorized" element={<Unauthorized />} />
+
+  {/* Host-only route */}
+  <Route
+    path="/host-spots"
+    element={
+      <ProtectedRoute requiredRole="HOST">
+        <HostSpots />
+      </ProtectedRoute>
+    }
+  />
+
+       
         <Route path="/spot/:id" element={<SpotDetail />} />
-         <Route path="/host-spots" element={<HostSpots />} />
+         {/* <Route path="/host-spots" element={<HostSpots />} /> */}
           <Route path="/edit-spot/:id" element={<EditSpot />} />
 
       </Routes>

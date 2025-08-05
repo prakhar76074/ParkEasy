@@ -62,6 +62,7 @@ const SpotList = () => {
     const radius = parseInt(radiusFilter);
 
     const filtered = allSpots.filter((spot) => {
+      
       const matchesTitle =
         title === '' || spot.title.toLowerCase().includes(title);
       const matchesCity =
@@ -139,11 +140,14 @@ const SpotList = () => {
                   <p className="text-sm text-gray-600 mb-2">
                     {spot.description}
                   </p>
-
+                
                   <div className="text-sm text-gray-700 mb-1">
                     <span className="font-semibold">Address:</span>{' '}
                     {`${spot.address}, ${spot.city}, ${spot.state} - ${spot.pincode}, ${spot.country}`}
                   </div>
+                  <p className={spot.available ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
+                 {spot.available ? "Available" : "Not Available now"}
+</p>
 
                   <div className="text-sm text-gray-700 mb-1">
                     <span className="font-semibold">Price:</span> ₹
@@ -160,7 +164,7 @@ const SpotList = () => {
                   >
                     View on Map
                   </a>
-
+                  
                   <Link to={`/spot/${spot.id}`}>
                     <button className="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700">
                       See Details
