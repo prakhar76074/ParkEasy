@@ -1,69 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import { getSpotsByHost } from '../services/SpotService';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
+import { getSpotsByHostId } from '../services/SpotService';
+import { useNavigate } from 'react-router-dom';
 
 const HostSpots = () => {
-  const hostId = "99f3b02e-42f4-4b3e-bc34-21a0cc8b27d9"; // TODO: Replace with logged-in user's ID
   const [spots, setSpots] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem('user'));
+  const hostId = user?.id;
 
   useEffect(() => {
-    fetchHostSpots();
-  }, []);
+    const fetchMySpots = async () => {
+      try {
+        const res = await getSpotsByHostId(hostId);
+        setLoading(false)
+        setSpots(res.data);
+      } catch (err) {
+        console.error('Error fetching your hosted spots:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const fetchHostSpots = async () => {
-    try {
-      const res = await getSpotsByHost(hostId);
-      setSpots(res.data);
-    } catch (err) {
-      console.error("Error fetching spots", err);
+    if (hostId) {
+      fetchMySpots();
     }
+  }, [hostId]);
+
+  const handleEdit = (id) => {
+    navigate(`/edit-spot/${id}`);
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this spot?");
-    if (!confirmDelete) return;
-
-    try {
-      await axios.delete(`http://localhost:8081/api/spots/${id}`);
-      setSpots(spots.filter((spot) => spot.id !== id));
-      alert("Spot deleted successfully.");
-    } catch (err) {
-      console.error("Error deleting spot:", err);
-      alert("Failed to delete spot.");
+    if (window.confirm('Are you sure you want to delete this spot?')) {
+      try {
+        await axios.delete(`http://localhost:8081/api/spots/${id}`);
+        setSpots(spots.filter((spot) => spot.id !== id));
+      } catch (err) {
+        console.error('Failed to delete spot:', err);
+      }
     }
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Your Listed Spots</h2>
-      {spots.length === 0 ? (
-        <p>No spots listed yet.</p>
-      ) : (
-        <ul className="space-y-4">
-          {spots.map((spot) => (
-            <li key={spot.id} className="bg-white p-4 shadow rounded">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold">{spot.title}</h3>
-                  <p className="text-sm text-gray-500">₹{spot.pricePerHour}/hr</p>
-                  <p className="text-sm text-gray-400">{spot.address}, {spot.city}</p>
-                </div>
-                <div className="flex gap-4">
-                  <a href={`/edit-spot/${spot.id}`} className="text-blue-600 hover:underline">
+    <div>
+      <Navbar />
+      <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-blue-700">My Hosted Spots</h2>
+          <button
+            onClick={() => navigate('/add-spot')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            + Create New Spot
+          </button>
+        </div>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : spots.length === 0 ? (
+          <p className="text-gray-500">You haven’t listed any parking spots yet.</p>
+        ) : (
+          <div className="grid gap-6">
+            {spots.map((spot) => (
+              <div key={spot.id} className="border p-5 rounded shadow bg-white">
+                <h3 className="text-xl font-semibold mb-1">{spot.title}</h3>
+                <p className="text-gray-600">{spot.address}, {spot.city}</p>
+                <p className="text-gray-700 font-medium mt-1">₹{spot.pricePerHour}/hr</p>
+                <p className={`font-semibold ${spot.available ? 'text-green-600' : 'text-red-600'} mt-1`}>
+                  {spot.available ? 'Available' : 'Unavailable'}
+                </p>
+
+                <div className="flex gap-4 mt-4">
+                  <button
+                    onClick={() => handleEdit(spot.id)}
+                    className="bg-yellow-400 text-black px-3 py-1 rounded hover:bg-yellow-500"
+                  >
                     Edit
-                  </a>
+                  </button>
                   <button
                     onClick={() => handleDelete(spot.id)}
-                    className="text-red-600 hover:underline"
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                   >
                     Delete
                   </button>
                 </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

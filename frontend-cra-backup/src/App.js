@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/spots" element={<SpotList />} />
-        <Route path="/add-spot" element={<SpotForm />} />
+       
         <Route path="/auth" element={<AuthForm />} />
        <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -31,11 +31,31 @@ function App() {
       </ProtectedRoute>
     }
   />
+  <Route
+    path="/add-spot"
+    element={
+      <ProtectedRoute requiredRole="HOST">
+        <SpotForm />
+      </ProtectedRoute>
+    }
+  />
+  
+
 
        
-        <Route path="/spot/:id" element={<SpotDetail />} />
+        <Route path="/spot/:id" element={
+      <ProtectedRoute requiredRole="HOST">
+        <SpotDetail />
+      </ProtectedRoute>
+    }
+        
+        />
          {/* <Route path="/host-spots" element={<HostSpots />} /> */}
-          <Route path="/edit-spot/:id" element={<EditSpot />} />
+          <Route path="/edit-spot/:id"  element={
+      <ProtectedRoute requiredRole="HOST">
+        <EditSpot />
+      </ProtectedRoute>
+    } />
 
       </Routes>
    

@@ -45,7 +45,9 @@ public class SpotController {
 
     @GetMapping("/host/{hostId}")
     public List<SpotResponseDto> getByHost(@PathVariable UUID hostId) {
-        return spotService.getByHost(hostId);
+        List<SpotResponseDto> spots = spotService.getByHost(hostId);
+        System.out.println("Spots"+spots);
+        return spots;
     }
 
     @PutMapping("/{id}")

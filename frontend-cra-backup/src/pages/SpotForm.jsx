@@ -46,9 +46,12 @@ const SpotForm = () => {
     //   ...spot,
     //   hostId: 1, // <- TEMP: replace with actual host id or from auth state
     // });
+  const user = JSON.parse(localStorage.getItem('user'));
+  //console.log(user)
+  const hostId = user.id;
     const spotWithHost = {
       ...spot,
-      hostId: "99f3b02e-42f4-4b3e-bc34-21a0cc8b27d9", // ✅ TEMP: Hardcoded hostId
+      hostId: hostId, 
     };
     
     await createSpot(spotWithHost);

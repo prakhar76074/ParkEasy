@@ -57,11 +57,13 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(user.getEmail(),
                 roles.stream().map(Enum::name).collect(Collectors.toSet()));
-
+        User user2 = userRepository.findByEmail(req.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
       return new AuthResponse(token, Map.of(
-                "name", user.getName(),
-                "email", user.getEmail(),
-                "roles", user.getRolesAsStrings()
+               "id", user2.getId(),
+                "name", user2.getName(),
+                "email", user2.getEmail(),
+                "roles", user2.getRolesAsStrings()
         ));
     }
 
@@ -79,6 +81,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(user.getEmail(), user.getRolesAsStrings());
 
         return new AuthResponse(token, Map.of(
+                 "id" , user.getId(),
                 "name", user.getName(),
                 "email", user.getEmail(),
                 "roles", user.getRolesAsStrings()

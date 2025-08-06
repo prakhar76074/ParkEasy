@@ -21,12 +21,20 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4">
         {isHost && (
+          <>
           <button
             onClick={() => navigate('/host-spots')}
             className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
           >
             My Hosted Spots
           </button>
+           <button
+           onClick={() => navigate('/add-spot')}
+           className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+         >
+           Add new Spot
+         </button>
+         </>
         )}
         </div>
       <div className="flex items-center gap-4">

@@ -60,7 +60,9 @@ public class SpotService {
     }
 
     public List<SpotResponseDto> getByHost(UUID hostId) {
-        return spotRepository.findByHostId(hostId).stream().map(this::toResponseDto).collect(Collectors.toList());
+        List<SpotResponseDto> response = spotRepository.findByHostId(hostId).stream().map(this::toResponseDto).collect(Collectors.toList());
+        System.out.println("responnse is : " + response);
+        return response;
     }
 
     public SpotResponseDto update(UUID id, SpotRequestDto dto) {
