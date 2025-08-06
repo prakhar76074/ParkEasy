@@ -21,17 +21,42 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4">
         {isHost && (
+          <>
           <button
             onClick={() => navigate('/host-spots')}
             className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
           >
             My Hosted Spots
           </button>
+           <button
+           onClick={() => navigate('/add-spot')}
+           className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+         >
+           Add new Spot
+         </button>
+         </>
         )}
         </div>
+        {user?.roles?.includes('HOST') && (
+  <button
+    onClick={() => navigate('/host-bookings')}
+    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+  >
+    Bookings
+  </button>
+)}
       <div className="flex items-center gap-4">
        
         {user && <span className="text-sm">Hi, {user.name.split(' ')[0]}</span>}
+        {token && (
+  <button
+    onClick={() => navigate('/my-bookings')}
+    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+  >
+    My Bookings
+  </button>
+)}
+
         {token ? (
           <button
             onClick={handleLogout}

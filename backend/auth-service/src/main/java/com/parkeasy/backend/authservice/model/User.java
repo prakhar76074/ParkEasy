@@ -30,9 +30,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+
+
+
     public Set<String> getRolesAsStrings() {
         return this.roles.stream().map(role -> role.name()).collect(Collectors.toSet());
+
     }
+
 
 
 }

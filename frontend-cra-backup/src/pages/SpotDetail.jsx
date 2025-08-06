@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
@@ -9,6 +9,9 @@ const SpotDetail = () => {
   const [loading, setLoading] = useState(true);
   const [hours, setHours] = useState(1);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+ 
 
   useEffect(() => {
     const fetchSpot = async () => {
@@ -31,6 +34,28 @@ const SpotDetail = () => {
     }
   }, [hours, spot]);
 
+  const handleBooking = async () => {
+    const now = new Date();
+    const startTime = now.toISOString();
+    const endTime = new Date(now.getTime() + hours * 60 * 60 * 1000).toISOString();
+
+    try {
+      await axios.post('http://localhost:8083/api/bookings', {
+        userId: user?.id,
+        spotId: id,
+        startTime,
+        endTime,
+        status: "PENDING"
+      });
+
+      alert("Booking placed! Waiting for host approval.");
+      //navigate('/my-bookings'); // optional redirect
+    } catch (err) {
+      console.error("Booking failed:", err);
+      alert("Booking failed. Try again.");
+    }
+  };
+
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (!spot) return <div className="text-center mt-10 text-red-600">Spot not found.</div>;
 
@@ -41,36 +66,20 @@ const SpotDetail = () => {
     <div>
       <Navbar />
       <div className="p-6 max-w-4xl mx-auto bg-white rounded shadow mt-6">
-        {/* Title */}
         <h2 className="text-3xl font-bold text-blue-700 mb-2">{spot.title}</h2>
         <p className="text-gray-600 text-sm mb-4">{spot.description}</p>
 
-        {/* Image Gallery */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
-          {spot.imageUrl1 && (
-            <img
-              src={spot.imageUrl1}
-              alt="Spot 1"
-              className="w-full md:w-1/2 h-64 object-cover rounded-lg"
-            />
-          )}
-          {spot.imageUrl2 && (
-            <img
-              src={spot.imageUrl2}
-              alt="Spot 2"
-              className="w-full md:w-1/2 h-64 object-cover rounded-lg"
-            />
-          )}
+          {spot.imageUrl1 && <img src={spot.imageUrl1} alt="Spot 1" className="w-full md:w-1/2 h-64 object-cover rounded-lg" />}
+          {spot.imageUrl2 && <img src={spot.imageUrl2} alt="Spot 2" className="w-full md:w-1/2 h-64 object-cover rounded-lg" />}
         </div>
 
-        {/* Spot Details */}
         <div className="space-y-2 text-gray-700 text-sm mb-4">
           <p><span className="font-medium">Address:</span> {addressString}</p>
           <p><span className="font-medium">Rate:</span> ₹{spot.pricePerHour} / hour</p>
           <p><span className="font-medium">Availability:</span> {spot.available ? 'Available' : 'Not Available'}</p>
         </div>
 
-        {/* Map View */}
         <div className="mt-6">
           <iframe
             src={mapUrl}
@@ -101,7 +110,7 @@ const SpotDetail = () => {
 
           <button
             className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
-            onClick={() => alert(`Booking confirmed for ₹${total}!`)}
+            onClick={handleBooking}
           >
             Confirm & Pay
           </button>

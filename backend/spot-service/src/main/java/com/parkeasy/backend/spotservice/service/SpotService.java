@@ -60,7 +60,9 @@ public class SpotService {
     }
 
     public List<SpotResponseDto> getByHost(UUID hostId) {
-        return spotRepository.findByHostId(hostId).stream().map(this::toResponseDto).collect(Collectors.toList());
+        List<SpotResponseDto> response = spotRepository.findByHostId(hostId).stream().map(this::toResponseDto).collect(Collectors.toList());
+        System.out.println("responnse is : " + response);
+        return response;
     }
 
     public SpotResponseDto update(UUID id, SpotRequestDto dto) {
@@ -77,6 +79,7 @@ public class SpotService {
         spot.setImageUrl1(dto.getImageUrl1());
         spot.setImageUrl2(dto.getImageUrl2());
         spot.setAvailable(dto.getAvailable());
+
 
         // Optionally update lat/lon again (if address changed)
         String updatedAddress = String.format("%s, %s, %s - %s, %s",
@@ -122,6 +125,7 @@ public class SpotService {
         dto.setImageUrl2(spot.getImageUrl2());
         dto.setLatitude(spot.getLatitude());
         dto.setLongitude(spot.getLongitude());
+        dto.setHostId(spot.getHostId());
         return dto;
     }
 }
