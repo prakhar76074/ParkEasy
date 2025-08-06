@@ -17,6 +17,7 @@ public class SpotResponseDto {
     private String country;
     private Double pricePerHour;
     private Boolean available;
+    private UUID hostId;
     private Double latitude;
     private Double longitude;
     private String imageUrl1;

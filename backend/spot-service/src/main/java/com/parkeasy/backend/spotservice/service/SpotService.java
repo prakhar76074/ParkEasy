@@ -80,6 +80,7 @@ public class SpotService {
         spot.setImageUrl2(dto.getImageUrl2());
         spot.setAvailable(dto.getAvailable());
 
+
         // Optionally update lat/lon again (if address changed)
         String updatedAddress = String.format("%s, %s, %s - %s, %s",
                 dto.getAddress(), dto.getCity(), dto.getState(), dto.getPincode(), dto.getCountry());
@@ -124,6 +125,7 @@ public class SpotService {
         dto.setImageUrl2(spot.getImageUrl2());
         dto.setLatitude(spot.getLatitude());
         dto.setLongitude(spot.getLongitude());
+        dto.setHostId(spot.getHostId());
         return dto;
     }
 }

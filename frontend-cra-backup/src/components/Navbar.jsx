@@ -37,9 +37,26 @@ const Navbar = () => {
          </>
         )}
         </div>
+        {user?.roles?.includes('HOST') && (
+  <button
+    onClick={() => navigate('/host-bookings')}
+    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+  >
+    Bookings
+  </button>
+)}
       <div className="flex items-center gap-4">
        
         {user && <span className="text-sm">Hi, {user.name.split(' ')[0]}</span>}
+        {token && (
+  <button
+    onClick={() => navigate('/my-bookings')}
+    className="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100"
+  >
+    My Bookings
+  </button>
+)}
+
         {token ? (
           <button
             onClick={handleLogout}
