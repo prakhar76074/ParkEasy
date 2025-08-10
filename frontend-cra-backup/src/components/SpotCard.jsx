@@ -1,37 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const SpotCard = ({ spot }) => {
-  const generateMapLink = () => {
-    const fullAddress = `${spot.address}, ${spot.city}, ${spot.state}, ${spot.pincode}, ${spot.country}`;
-    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
-  };
-
+const SpotCard = ({ spot, generateMapLink }) => {
   return (
-    <div className="bg-white shadow-md rounded-xl overflow-hidden hover:shadow-lg">
+    <div className="bg-white shadow-md rounded-xl overflow-hidden border hover:shadow-lg transition">
       {spot.imageUrl1 && (
-        <img src={spot.imageUrl1} alt={spot.title} className="w-full h-40 object-cover" />
+        <img
+          src={spot.imageUrl1}
+          alt="Spot"
+          className="w-full h-48 object-cover"
+        />
       )}
       <div className="p-4">
-        <h3 className="text-xl font-semibold text-blue-800">{spot.title}</h3>
-        <p className="text-sm text-gray-600 mb-2">{spot.description}</p>
-        <p className="text-sm text-gray-700 mb-1">
-          <strong>Address:</strong> {spot.address}, {spot.city}, {spot.state}, {spot.pincode}
+        <h3 className="text-xl font-semibold text-blue-800">
+          {spot.title}
+        </h3>
+        <p className="text-sm text-gray-600 mb-2">
+          {spot.description}
         </p>
-        <p className={spot.available ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
-        Available :{spot.available ? "Available" : "Not Available"}
-</p>
-        <p className="text-sm text-gray-700 mb-1">
-          <strong>Price:</strong> ₹{spot.pricePerHour}/hr
+
+        <div className="text-sm text-gray-700 mb-1">
+          <span className="font-semibold">Address:</span>{" "}
+          {`${spot.address}, ${spot.city}, ${spot.state} - ${spot.pincode}, ${spot.country}`}
+        </div>
+        <p
+          className={
+            spot.available
+              ? "text-green-600 font-semibold"
+              : "text-red-600 font-semibold"
+          }
+        >
+          {spot.available ? "Available" : "Not Available now"}
         </p>
+
+        <div className="text-sm text-gray-700 mb-1">
+          <span className="font-semibold">Price:</span> ₹
+          {spot.pricePerHour}/hr
+        </div>
       </div>
 
-      <div className="p-3 bg-blue-50 flex justify-between items-center">
+      <div className="bg-blue-50 p-3 flex justify-between items-center">
         <a
-          href={generateMapLink()}
+          href={generateMapLink(spot)}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 text-sm underline"
+          className="text-blue-600 text-sm underline hover:text-blue-800"
         >
           View on Map
         </a>
