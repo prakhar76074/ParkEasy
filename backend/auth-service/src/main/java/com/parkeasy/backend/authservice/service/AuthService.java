@@ -3,6 +3,7 @@ package com.parkeasy.backend.authservice.service;
 import com.parkeasy.backend.authservice.dto.AuthResponse;
 import com.parkeasy.backend.authservice.dto.LoginRequest;
 import com.parkeasy.backend.authservice.dto.RegisterRequest;
+import com.parkeasy.backend.authservice.dto.UserDto;
 import com.parkeasy.backend.authservice.model.Role;
 import com.parkeasy.backend.authservice.model.User;
 import com.parkeasy.backend.authservice.repository.UserRepository;
@@ -87,4 +88,10 @@ public class AuthService {
                 "roles", user.getRolesAsStrings()
         ));
    }
+
+    public UserDto getUserById(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return new UserDto(user.getName(), user.getEmail(),user.getId());
+    }
 }

@@ -9,6 +9,9 @@ const SpotDetail = () => {
   const [loading, setLoading] = useState(true);
   const [hours, setHours] = useState(1);
   const [total, setTotal] = useState(0);
+  // Add these to your state
+const [startTime, setStartTime] = useState("");
+const [endTime, setEndTime] = useState("");
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user'));
  
@@ -29,33 +32,47 @@ const SpotDetail = () => {
   }, [id]);
 
   useEffect(() => {
-    if (spot) {
-      setTotal(spot.pricePerHour * hours);
+    if (spot && startTime && endTime) {
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+      const diffHours = Math.max((end - start) / (1000 * 60 * 60), 0);
+      setTotal(diffHours * spot.pricePerHour);
     }
-  }, [hours, spot]);
+  }, [startTime, endTime, spot]);
 
-  const handleBooking = async () => {
-    const now = new Date();
-    const startTime = now.toISOString();
-    const endTime = new Date(now.getTime() + hours * 60 * 60 * 1000).toISOString();
 
-    try {
-      await axios.post('http://localhost:8083/api/bookings', {
-        userId: user?.id,
-        spotId: id,
-        startTime,
-        endTime,
-        status: "PENDING"
-      });
+ const handleBooking = async () => {
+  if (!startTime || !endTime) {
+    alert("Please select both start and end times.");
+    return;
+  }
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  if(start>=end){
+    alert("Please select correct start and end time");
+    return;
 
-      alert("Booking placed! Waiting for host approval.");
-      //navigate('/my-bookings'); // optional redirect
-    } catch (err) {
-      console.error("Booking failed:", err);
-      alert("Booking failed. Try again.");
-    }
-  };
+  }
+  if(!spot.available){
+    alert("Spot is not available at this moment");
+    return;
+  }
 
+  try {
+    await axios.post('http://localhost:8083/api/bookings', {
+      userId: user?.id,
+      spotId: id,
+      startTime: new Date(startTime).toISOString(),
+      endTime: new Date(endTime).toISOString(),
+      status: "PENDING"
+    });
+
+    alert("Booking placed! Waiting for host approval.");
+  } catch (err) {
+    console.error("Booking failed:", err);
+    alert("Booking failed. Try again.");
+  }
+};
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (!spot) return <div className="text-center mt-10 text-red-600">Spot not found.</div>;
 
@@ -91,32 +108,39 @@ const SpotDetail = () => {
           ></iframe>
         </div>
 
-        {/* Booking Section */}
+{/* Booking section */}
         <div className="mt-8 border-t pt-6">
-          <h3 className="text-xl font-semibold text-blue-800 mb-3">Book This Spot</h3>
+  <h3 className="text-xl font-semibold text-blue-800 mb-3">Book This Spot</h3>
 
-          <label className="block mb-2 text-sm font-medium text-gray-700">Number of Hours</label>
-          <input
-            type="number"
-            min="1"
-            className="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={hours}
-            onChange={(e) => setHours(Number(e.target.value))}
-          />
+  <label className="block mb-2 text-sm font-medium text-gray-700">From Time</label>
+  <input
+    type="datetime-local"
+    className="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    value={startTime}
+    onChange={(e) => setStartTime(e.target.value)}
+  />
 
-          <div className="text-lg mb-4">
-            <strong>Total Price:</strong> ₹{total}
-          </div>
+  <label className="block mb-2 text-sm font-medium text-gray-700">To Time</label>
+  <input
+    type="datetime-local"
+    className="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    value={endTime}
+    onChange={(e) => setEndTime(e.target.value)}
+  />
 
-          <button
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
-            onClick={handleBooking}
-          >
-            Confirm & Pay
-          </button>
-        </div>
-      </div>
-    </div>
+  <div className="text-lg mb-4">
+    <strong>Total Price:</strong> ₹{total}
+  </div>
+
+  <button
+    className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+    onClick={handleBooking}
+  >
+    Confirm & Pay
+  </button>
+</div>
+</div>
+</div>
   );
 };
 

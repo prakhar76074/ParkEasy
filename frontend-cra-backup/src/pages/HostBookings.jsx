@@ -49,7 +49,7 @@ const HostBookings = () => {
               <div key={booking.id} className="border rounded p-4 shadow flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-semibold">{booking.spotTitle}</h3>
-                  <p className="text-gray-600 text-sm">User: {booking.userId}</p>
+                  <p className="text-gray-600 text-sm">User: {booking.username}</p>
                   <p className="text-gray-600 text-sm">
                     {new Date(booking.startTime).toLocaleString()} → {new Date(booking.endTime).toLocaleString()}
                   </p>

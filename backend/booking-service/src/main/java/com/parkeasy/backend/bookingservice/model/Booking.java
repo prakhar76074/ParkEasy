@@ -19,6 +19,7 @@ public class Booking {
     private UUID spotId;
 
     private UUID userId;
+
     private LocalDate date;
     private String timeSlot; // e.g. "10AM - 12PM"
     private UUID hostId; //
