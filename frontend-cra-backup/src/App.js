@@ -43,7 +43,7 @@ function App() {
   <Route
     path="/add-spot"
     element={
-      <ProtectedRoute requiredRole="HOST">
+      <ProtectedRoute requiredRole={["USER","HOST"]}>
         <SpotForm />
       </ProtectedRoute>
     }
@@ -51,7 +51,7 @@ function App() {
   
 
   <Route path="/my-bookings" element={
-    <ProtectedRoute requiredRole="HOST">
+    <ProtectedRoute requiredRole="BOTH">
       <UserBookings />
     </ProtectedRoute>
   } />

@@ -1,123 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import Navbar from '../components/Navbar';
+import React, { useEffect, useState } from "react";
+import { getSpots } from "../services/SpotService";
+import Navbar from "../components/Navbar";
+import SpotFilter from "../components/SpotFilter";
+import SpotGrid from "../components/SpotGrid";
+import { haversineDistance } from "../utils/distanceUtils";
+import { useSearchParams } from "react-router-dom";
 
-const SpotDetail = () => {
-  const { id } = useParams();
-  const [spot, setSpot] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [hours, setHours] = useState(1);
-  const [total, setTotal] = useState(0);
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user'));
- 
+const SpotListPage = () => {
+  const [allSpots, setAllSpots] = useState([]);
+  const [filteredSpots, setFilteredSpots] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const titleInput = searchParams.get("title") || "";
+  const cityInput = searchParams.get("city") || "";
+  const radiusFilter = searchParams.get("radius") || "";
 
   useEffect(() => {
-    const fetchSpot = async () => {
+    const fetchSpots = async () => {
       try {
-        const res = await axios.get(`http://localhost:8081/api/spots/${id}`);
-        setSpot(res.data);
-        setTotal(res.data.pricePerHour); // default 1 hour
+        const res = await getSpots();
+        setAllSpots(res.data);
+        setFilteredSpots(res.data);
       } catch (error) {
-        console.error("Failed to load spot:", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching spots:", error);
       }
     };
-    fetchSpot();
-  }, [id]);
+    fetchSpots();
 
-  useEffect(() => {
-    if (spot) {
-      setTotal(spot.pricePerHour * hours);
-    }
-  }, [hours, spot]);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
+      },
+      (err) => {
+        console.warn("Geolocation error:", err.message);
+      }
+    );
+  }, []);
 
-  const handleBooking = async () => {
-    const now = new Date();
-    const startTime = now.toISOString();
-    const endTime = new Date(now.getTime() + hours * 60 * 60 * 1000).toISOString();
+  const handleSearch = (filters) => {
+    setSearchParams(filters); // updates URL
+    const { title, city, radius } = filters;
 
-    try {
-      await axios.post('http://localhost:8083/api/bookings', {
-        userId: user?.id,
-        spotId: id,
-        startTime,
-        endTime,
-        status: "PENDING"
-      });
+    const filtered = allSpots.filter((spot) => {
+      const matchesTitle =
+        !title || spot.title.toLowerCase().includes(title.toLowerCase());
+      const matchesCity =
+        !city || spot.city.toLowerCase().includes(city.toLowerCase());
 
-      alert("Booking placed! Waiting for host approval.");
-      //navigate('/my-bookings'); // optional redirect
-    } catch (err) {
-      console.error("Booking failed:", err);
-      alert("Booking failed. Try again.");
-    }
+      let withinRadius = true;
+      if (userLocation && radius && spot.latitude && spot.longitude) {
+        const dist = haversineDistance(
+          userLocation.latitude,
+          userLocation.longitude,
+          spot.latitude,
+          spot.longitude
+        );
+        withinRadius = dist <= parseInt(radius);
+      }
+
+      return matchesTitle && matchesCity && withinRadius;
+    });
+
+    setFilteredSpots(filtered);
   };
 
-  if (loading) return <div className="text-center mt-10">Loading...</div>;
-  if (!spot) return <div className="text-center mt-10 text-red-600">Spot not found.</div>;
-
-  const addressString = `${spot.address}, ${spot.city}, ${spot.state}, ${spot.pincode}, ${spot.country}`;
-  const mapUrl = `https://www.google.com/maps?q=${encodeURIComponent(addressString)}&output=embed`;
+  const generateMapLink = (spot) => {
+    const fullAddress = `${spot.address}, ${spot.city}, ${spot.state}, ${spot.pincode}, ${spot.country}`;
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+  };
 
   return (
     <div>
       <Navbar />
-      <div className="p-6 max-w-4xl mx-auto bg-white rounded shadow mt-6">
-        <h2 className="text-3xl font-bold text-blue-700 mb-2">{spot.title}</h2>
-        <p className="text-gray-600 text-sm mb-4">{spot.description}</p>
+      <section className="py-8 px-4 md:px-10 lg:px-20 bg-gray-100 min-h-screen">
+        <h2 className="text-3xl font-bold text-blue-700 mb-4 text-center">
+          Available Parking Spots
+        </h2>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          {spot.imageUrl1 && <img src={spot.imageUrl1} alt="Spot 1" className="w-full md:w-1/2 h-64 object-cover rounded-lg" />}
-          {spot.imageUrl2 && <img src={spot.imageUrl2} alt="Spot 2" className="w-full md:w-1/2 h-64 object-cover rounded-lg" />}
-        </div>
+        <SpotFilter
+          titleInput={titleInput}
+          cityInput={cityInput}
+          radiusFilter={radiusFilter}
+          onSearch={handleSearch}
+        />
 
-        <div className="space-y-2 text-gray-700 text-sm mb-4">
-          <p><span className="font-medium">Address:</span> {addressString}</p>
-          <p><span className="font-medium">Rate:</span> ₹{spot.pricePerHour} / hour</p>
-          <p><span className="font-medium">Availability:</span> {spot.available ? 'Available' : 'Not Available'}</p>
-        </div>
-
-        <div className="mt-6">
-          <iframe
-            src={mapUrl}
-            width="100%"
-            height="300"
-            className="rounded border"
-            loading="lazy"
-            allowFullScreen
-          ></iframe>
-        </div>
-
-        {/* Booking Section */}
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-xl font-semibold text-blue-800 mb-3">Book This Spot</h3>
-
-          <label className="block mb-2 text-sm font-medium text-gray-700">Number of Hours</label>
-          <input
-            type="number"
-            min="1"
-            className="w-full px-4 py-2 border rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={hours}
-            onChange={(e) => setHours(Number(e.target.value))}
-          />
-
-          <div className="text-lg mb-4">
-            <strong>Total Price:</strong> ₹{total}
-          </div>
-
-          <button
-            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
-            onClick={handleBooking}
-          >
-            Confirm & Pay
-          </button>
-        </div>
-      </div>
+        <SpotGrid spots={filteredSpots} generateMapLink={generateMapLink} />
+      </section>
     </div>
   );
 };
 
-export default SpotDetail;
+export default SpotListPage;

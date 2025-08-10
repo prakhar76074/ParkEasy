@@ -10,6 +10,7 @@ import java.util.UUID;
 public class BookingRequestDto {
     private UUID spotId;
     private UUID userId;
+    private String username;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }

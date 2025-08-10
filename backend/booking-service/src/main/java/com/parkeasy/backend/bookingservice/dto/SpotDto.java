@@ -14,6 +14,7 @@ public class SpotDto {
     private Double pricePerHour;
     private Boolean available;
     private UUID hostId;
+
     // Add other necessary fields
 
     // Getters and Setters

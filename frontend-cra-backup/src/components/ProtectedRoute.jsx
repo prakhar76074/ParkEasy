@@ -10,7 +10,16 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
 
-    if (!payload.roles || !payload.roles.includes(requiredRole)) {
+    // Convert requiredRole into an array
+    let allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+
+    // If "BOTH" is in the list, add USER and HOST automatically
+    if (allowedRoles.includes("BOTH")) {
+      allowedRoles = [...allowedRoles, "USER", "HOST"];
+    }
+
+    // Check if user has at least one matching role
+    if (!payload.roles || !payload.roles.some(role => allowedRoles.includes(role))) {
       return <Navigate to="/unauthorized" />;
     }
 
